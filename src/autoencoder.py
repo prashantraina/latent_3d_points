@@ -62,8 +62,8 @@ class Configuration():
         return hasattr(self, attribute) and getattr(self, attribute) is not None
 
     def __str__(self):
-        keys = self.__dict__.keys()
-        vals = self.__dict__.values()
+        keys = list(self.__dict__.keys())
+        vals = list(self.__dict__.values())
         index = np.argsort(keys)
         res = ''
         for i in index:
@@ -81,7 +81,7 @@ class Configuration():
 
     @staticmethod
     def load(file_name):
-        return unpickle_data(file_name + '.pickle').next()
+        return next(unpickle_data(file_name + '.pickle'))
 
 
 class AutoEncoder(Neural_Net):
@@ -113,7 +113,7 @@ class AutoEncoder(Neural_Net):
             warnings.warn('Loaded model\'s epoch doesn\'t match the requested one.')
         else:
             if verbose:
-                print('Model restored in epoch {0}.'.format(epoch))
+                print(('Model restored in epoch {0}.'.format(epoch)))
 
     def partial_fit(self, X, GT=None):
         '''Trains the model with mini-batches of input data.
@@ -179,13 +179,13 @@ class AutoEncoder(Neural_Net):
         if c.saver_step is not None:
             create_dir(c.train_dir)
 
-        for _ in xrange(c.training_epochs):
+        for _ in range(c.training_epochs):
             loss, duration = self._single_epoch_train(train_data, c)
             epoch = int(self.sess.run(self.epoch.assign_add(tf.constant(1.0))))
             stats.append((epoch, loss, duration))
 
             if epoch % c.loss_display_step == 0:
-                print("Epoch:", '%04d' % (epoch), 'training time (minutes)=', "{:.4f}".format(duration / 60.0), "loss=", "{:.9f}".format(loss))
+                print(("Epoch:", '%04d' % (epoch), 'training time (minutes)=', "{:.4f}".format(duration / 60.0), "loss=", "{:.9f}".format(loss)))
                 if log_file is not None:
                     log_file.write('%04d\t%.9f\t%.4f\n' % (epoch, loss, duration / 60.0))
 
@@ -200,7 +200,7 @@ class AutoEncoder(Neural_Net):
 
             if held_out_data is not None and c.exists_and_is_not_none('held_out_step') and (epoch % c.held_out_step == 0):
                 loss, duration = self._single_epoch_train(held_out_data, c, only_fw=True)
-                print("Held Out Data :", 'forward time (minutes)=', "{:.4f}".format(duration / 60.0), "loss=", "{:.9f}".format(loss))
+                print(("Held Out Data :", 'forward time (minutes)=', "{:.4f}".format(duration / 60.0), "loss=", "{:.9f}".format(loss)))
                 if log_file is not None:
                     log_file.write('On Held_Out: %04d\t%.9f\t%.4f\n' % (epoch, loss, duration / 60.0))
         return stats
@@ -222,7 +222,7 @@ class AutoEncoder(Neural_Net):
 
         b = configuration.batch_size
         reconstructions = np.zeros([n_examples] + self.n_output)
-        for i in xrange(0, n_examples, b):
+        for i in range(0, n_examples, b):
             if self.is_denoising:
                 reconstructions[i:i + b], loss = self.reconstruct(feed_data[i:i + b], original_data[i:i + b])
             else:
@@ -259,7 +259,7 @@ class AutoEncoder(Neural_Net):
         reconstructions = np.zeros([n_examples] + self.n_output)
         losses = np.zeros([n_examples])
 
-        for i in xrange(n_examples):
+        for i in range(n_examples):
             if self.is_denoising:
                 reconstructions[i], losses[i] = self.reconstruct(feed_data[i], original_data[i])
             else:

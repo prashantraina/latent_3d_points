@@ -31,7 +31,7 @@ class GAN(Neural_Net):
             warnings.warn('Loaded model\'s epoch doesn\'t match the requested one.')
         else:
             if verbose:
-                print('Model restored in epoch {0}.'.format(epoch))
+                print(('Model restored in epoch {0}.'.format(epoch)))
 
     def optimizer(self, learning_rate, beta, loss, var_list):
         initial_learning_rate = learning_rate

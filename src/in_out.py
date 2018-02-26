@@ -63,7 +63,7 @@ def unpickle_data(file_name):
     '''
     inFile = open(file_name, 'rb')
     size = cPickle.load(inFile)
-    for _ in xrange(size):
+    for _ in range(size):
         yield cPickle.load(inFile)
     inFile.close()
 
@@ -133,7 +133,7 @@ def load_point_clouds_from_filenames(file_names, n_threads, loader, verbose=Fals
         warnings.warn('Point clouds with the same model name were loaded.')
 
     if verbose:
-        print('{0} pclouds were loaded. They belong in {1} shape-classes.'.format(len(pclouds), len(np.unique(class_ids))))
+        print(('{0} pclouds were loaded. They belong in {1} shape-classes.'.format(len(pclouds), len(np.unique(class_ids)))))
 
     return pclouds, model_names, class_ids
 
